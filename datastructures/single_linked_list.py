@@ -16,10 +16,10 @@ class SingleLinkedList(Generic[T]):
         self.__head: Optional[SingleNode[T]] = None
         self.__tail: Optional[SingleNode[T]] = None
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.__length
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = '['
         node = self.__head
 
@@ -60,7 +60,7 @@ class SingleLinkedList(Generic[T]):
         del delete_node
         self.__length -= 1
 
-    def __reversed__(self):
+    def __reversed__(self) -> 'SingleLinkedList[T]':
         def unshift(new_list: 'SingleLinkedList[T]', data: T) -> None:
             new_list.unshift(data)
 

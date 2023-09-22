@@ -68,7 +68,7 @@ class HashTable(Generic[K, V]):
 
         return '{' + ', '.join(parts) + '}'
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.__size
 
     def get(self, __key: K, __default_value: Optional[Any] = None) -> V:
