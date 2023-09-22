@@ -1,6 +1,6 @@
 import unittest
 
-from lab2.datastructures import SingleLinkedList
+from datastructures import SingleLinkedList
 
 
 class TestSingleLinkedList(unittest.TestCase):
