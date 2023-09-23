@@ -133,7 +133,7 @@ class TestSingleLinkedList(unittest.TestCase):
         self.assertEqual(self.linked_list, other_list)
 
         other_list.pop()
-        self.assertNotEqual(self.linked_list, other_list)
+        self.assertNotEqual(self.linked_list, other_list)  
 
 
 if __name__ == "__main__":

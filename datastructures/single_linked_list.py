@@ -75,9 +75,13 @@ class SingleLinkedList(Generic[T]):
         return new_list
 
     def __contains__(self, __object: T) -> bool:
-        for data in self:
-            if data == __object:
+        node = self.__head
+
+        while node is not None:
+            if node.data == __object:
                 return True
+
+            node = node.next_ptr
 
         return False
 
@@ -85,11 +89,32 @@ class SingleLinkedList(Generic[T]):
         if not isinstance(__other, SingleLinkedList) or self.__length != len(__other):
             return False
 
-        for index in range(self.__length):
-            if self[index] != __other[index]:
-                return False
+        node = self.__head
+        iterator = iter(__other)
+
+        while True:
+            try:
+                if node.data != next(iterator):
+                    return False
+
+                node = node.next_ptr
+            except (StopIteration, AttributeError):
+                break
 
         return True
+
+    def __iter__(self) -> 'SingleLinkedList[T]':
+        self.__iterator = self.__head
+        return self
+
+    def __next__(self) -> T:
+        if self.__iterator is None:
+            raise StopIteration
+
+        result = self.__iterator.data
+        self.__iterator = self.__iterator.next_ptr
+
+        return result
 
     def push(self, __object: T) -> None:
         node = SingleNode[T](__object)
@@ -218,9 +243,15 @@ class SingleLinkedList(Generic[T]):
         return self.__mutate_new(push)
 
     def index(self, __object: T) -> int:
-        for idx, data in enumerate(self):
-            if data == __object:
+        node = self.__head
+        idx = 0
+
+        while node is not None:
+            if node.data == __object:
                 return idx
+
+            node = node.next_ptr
+            idx += 1
 
         raise ValueError(f'{__object} is not in list')
 
@@ -240,8 +271,10 @@ class SingleLinkedList(Generic[T]):
 
     def __mutate_new(self, callback: Callable[['SingleLinkedList[T]', T], None]) -> 'SingleLinkedList[T]':
         new_list = SingleLinkedList[T]()
+        node = self.__head
 
-        for data in self:
-            callback(new_list, data)
+        while node is not None:
+            callback(new_list, node.data)
+            node = node.next_ptr
 
         return new_list

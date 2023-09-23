@@ -26,6 +26,9 @@ class HashTable(Generic[K, V]):
         self.__array: list[Optional[HashNode]] = [None] * self.__sizes[self.__sizes_index]
 
     def __getitem__(self, __key: K) -> V:
+        if not isinstance(__key, (int, float, bool, str, tuple)):
+            raise KeyError('key should be immutable')
+
         hash_index = self.__get_index(__key)
 
         if hash_index is None:
@@ -34,12 +37,18 @@ class HashTable(Generic[K, V]):
         return self.__array[hash_index].value
 
     def __setitem__(self, __key: K, __value: V) -> None:
+        if not isinstance(__key, (int, float, bool, str, tuple)):
+            raise KeyError('key should be immutable')
+
         if self.__sizes[self.__sizes_index] * self.__factor < self.__size:
             self.__increase_array_size()
 
         self.__insert(__key, __value)
 
     def __delitem__(self, __key: K) -> None:
+        if not isinstance(__key, (int, float, bool, str, tuple)):
+            raise KeyError('key should be immutable')
+
         hash_index = self.__get_index(__key)
 
         if hash_index is None:
@@ -51,6 +60,9 @@ class HashTable(Generic[K, V]):
         del node
 
     def __contains__(self, __key: K) -> bool:
+        if not isinstance(__key, (int, float, bool, str, tuple)):
+            raise KeyError('key should be immutable')
+
         return self.__array[self.__get_index(__key)] is not None
 
     def __str__(self) -> str:
@@ -72,6 +84,9 @@ class HashTable(Generic[K, V]):
         return self.__size
 
     def get(self, __key: K, __default_value: Optional[Any] = None) -> V:
+        if not isinstance(__key, (int, float, bool, str, tuple)):
+            raise KeyError('key should be immutable')
+
         hash_index = self.__get_index(__key)
 
         return __default_value if self.__array[hash_index] is None else self.__array[hash_index].value
