@@ -31,7 +31,7 @@ class HashTable(Generic[K, V]):
 
         hash_index = self.__get_index(__key)
 
-        if hash_index is None:
+        if self.__array[hash_index] is None:
             raise KeyError(f'there is no item with key {__key}')
 
         return self.__array[hash_index].value
@@ -51,7 +51,7 @@ class HashTable(Generic[K, V]):
 
         hash_index = self.__get_index(__key)
 
-        if hash_index is None:
+        if self.__array[hash_index] is None:
             raise KeyError(f'there is no item with key {__key}')
 
         node = self.__array[hash_index]
@@ -76,7 +76,7 @@ class HashTable(Generic[K, V]):
 
         parts = []
 
-        self.__map_nodes(add_to_parts)
+        self.__for_each_node(add_to_parts)
 
         return '{' + ', '.join(parts) + '}'
 
@@ -120,6 +120,13 @@ class HashTable(Generic[K, V]):
 
         return output
 
+    def __for_each_node(self, __callback: Callable[[HashNode[K, V]], None]) -> None:
+        for node in self.__array:
+            if node is None:
+                continue
+
+            __callback(node)
+
     def __increase_array_size(self) -> None:
         self.__sizes_index += 1
         old_array = self.__array
@@ -144,9 +151,13 @@ class HashTable(Generic[K, V]):
         hash_index = self.__get_index(__key)
 
         if self.__array[hash_index] is None:
+            self.__array[hash_index] = node
             self.__size += 1
+            return
 
+        old_node = self.__array[hash_index]
         self.__array[hash_index] = node
+        del old_node
 
     @staticmethod
     def __get_hash(__key: K) -> int:
