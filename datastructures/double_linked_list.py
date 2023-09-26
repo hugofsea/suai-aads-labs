@@ -17,6 +17,24 @@ class DoubleLinkedList(Generic[T]):
         self.__tail: Optional[Node[T]] = None
         self.__length: int = 0
 
+    def __getitem__(self, __index: int) -> T:
+        self.__check_index(__index)
+
+        if __index >= 0:
+            node = self.__head
+            i = 0
+
+            while i < __index:
+                node = node.next_ptr
+                i += 1
+        else:
+            node = self.__tail
+            i = self.__length - 1
+
+            while i > __index:
+                node = node.prev_ptr
+                i -= 1
+
     def __len__(self) -> int:
         return self.__length
 
@@ -97,3 +115,10 @@ class DoubleLinkedList(Generic[T]):
             current_node = next_node
 
         self.__head, self.__tail = self.__tail, self.__head
+
+    def __check_index(self, __index: int):
+        if not isinstance(__index, int):
+            raise TypeError('list indices must be integers')
+
+        if not (0 <= __index < self.__length or -self.__length <= -__index <= -1):
+            raise IndexError('list index out of range')
