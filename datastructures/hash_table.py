@@ -27,7 +27,7 @@ class HashTable(Generic[K, V]):
 
     def __getitem__(self, __key: K) -> V:
         if not isinstance(__key, (int, float, bool, str, tuple)):
-            raise KeyError('key should be immutable')
+            raise TypeError('hashmap key should be immutable')
 
         hash_index = self.__get_index(__key)
 
@@ -38,7 +38,7 @@ class HashTable(Generic[K, V]):
 
     def __setitem__(self, __key: K, __value: V) -> None:
         if not isinstance(__key, (int, float, bool, str, tuple)):
-            raise KeyError('key should be immutable')
+            raise TypeError('hashmap key should be immutable')
 
         if self.__sizes[self.__sizes_index] * self.__factor < self.__size:
             self.__increase_array_size()
@@ -47,7 +47,7 @@ class HashTable(Generic[K, V]):
 
     def __delitem__(self, __key: K) -> None:
         if not isinstance(__key, (int, float, bool, str, tuple)):
-            raise KeyError('key should be immutable')
+            raise TypeError('hashmap key should be immutable')
 
         hash_index = self.__get_index(__key)
 
@@ -61,7 +61,7 @@ class HashTable(Generic[K, V]):
 
     def __contains__(self, __key: K) -> bool:
         if not isinstance(__key, (int, float, bool, str, tuple)):
-            raise KeyError('key should be immutable')
+            raise TypeError('hashmap key should be immutable')
 
         return self.__array[self.__get_index(__key)] is not None
 
@@ -85,7 +85,7 @@ class HashTable(Generic[K, V]):
 
     def get(self, __key: K, __default_value: Optional[Any] = None) -> V:
         if not isinstance(__key, (int, float, bool, str, tuple)):
-            raise KeyError('key should be immutable')
+            raise TypeError('hashmap key should be immutable')
 
         hash_index = self.__get_index(__key)
 

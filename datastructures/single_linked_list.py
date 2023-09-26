@@ -35,7 +35,7 @@ class SingleLinkedList(Generic[T]):
 
     def __getitem__(self, __key: int) -> T:
         if not isinstance(__key, int):
-            raise TypeError("key must be an integer")
+            raise TypeError("list indices must be integers")
 
         node = self.__get_node(__key)
 
@@ -43,14 +43,14 @@ class SingleLinkedList(Generic[T]):
 
     def __setitem__(self, __key: int, __object: T) -> None:
         if not isinstance(__key, int):
-            raise TypeError("key must be an integer")
+            raise TypeError("list indices must be integers")
 
         node = self.__get_node(__key)
         node.data = __object
 
     def __delitem__(self, __key: int) -> None:
         if not isinstance(__key, int):
-            raise TypeError("key must be an integer")
+            raise TypeError("list indices must be integers")
 
         node = self.__get_node(__key - 1)
 
