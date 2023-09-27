@@ -1,7 +1,7 @@
-from typing import NamedTuple
+from pydantic import BaseModel
 
 
-class Car(NamedTuple):
+class Car(BaseModel):
     model: str
     vin: str
     engine_volume: float

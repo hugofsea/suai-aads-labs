@@ -1,5 +1,6 @@
+import json
 from dataclasses import dataclass
-from typing import Generic, TypeVar, Optional
+from typing import Generic, TypeVar, Optional, Iterable
 
 T = TypeVar('T')
 
@@ -12,10 +13,14 @@ class Node(Generic[T]):
 
 
 class DoubleLinkedList(Generic[T]):
-    def __init__(self):
+    def __init__(self, __iterable: Optional[Iterable[T]] = None):
         self.__head: Optional[Node[T]] = None
         self.__tail: Optional[Node[T]] = None
         self.__length: int = 0
+
+        if __iterable is not None:
+            for data in __iterable:
+                self.push(data)
 
     def __getitem__(self, __index: int) -> T:
         self.__check_index(__index)
@@ -38,6 +43,33 @@ class DoubleLinkedList(Generic[T]):
     def __len__(self) -> int:
         return self.__length
 
+    def __iter__(self) -> 'DoubleLinkedList[T]':
+        self.__iterator = self.__head
+        return self
+
+    def __next__(self) -> T:
+        if self.__iterator is None:
+            raise StopIteration
+
+        result = self.__iterator.data
+        self.__iterator = self.__iterator.next_ptr
+
+        return result
+
+    def __str__(self) -> str:
+        string = 'DoubleLinkedList(['
+        node = self.__head
+
+        while node is not None:
+            string += str(node.data)
+
+            if node.next_ptr is not None:
+                string += ', '
+
+            node = node.next_ptr
+
+        return string + '])'
+
     @property
     def first(self) -> Optional[T]:
         return self.__head.data if self.__head is not None else None
@@ -54,7 +86,7 @@ class DoubleLinkedList(Generic[T]):
             self.__length += 1
             return
 
-        self.__tail.prev_ptr = new_node
+        self.__tail.next_ptr = new_node
         self.__tail = new_node
         self.__length += 1
 
@@ -66,7 +98,7 @@ class DoubleLinkedList(Generic[T]):
             self.__length += 1
             return
 
-        self.__head.next_ptr = new_node
+        self.__head.prev_ptr = new_node
         self.__head = new_node
         self.__length += 1
 

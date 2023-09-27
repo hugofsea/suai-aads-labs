@@ -1,7 +1,7 @@
-from typing import NamedTuple
+from pydantic import BaseModel
 
 
-class Student(NamedTuple):
+class Student(BaseModel):
     full_name: str
     group: str
     course: int
