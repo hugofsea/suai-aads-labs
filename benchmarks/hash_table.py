@@ -6,7 +6,7 @@ from datastructures import HashTable
 ITERATIONS = 200_000
 
 
-class SignleLinkedListBenchmark:
+class HashTableBenchmark:
     @staticmethod
     def run():
         tests_args = (
@@ -18,7 +18,7 @@ class SignleLinkedListBenchmark:
         )
 
         for test_args in tests_args:
-            SignleLinkedListBenchmark.test(*test_args)
+            HashTableBenchmark.test(*test_args)
 
     @staticmethod
     def test(
@@ -48,4 +48,4 @@ class SignleLinkedListBenchmark:
 
 
 if __name__ == '__main__':
-    SignleLinkedListBenchmark.run()
+    HashTableBenchmark.run()
