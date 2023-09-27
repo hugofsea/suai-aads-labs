@@ -25,7 +25,7 @@ class SignleLinkedListBenchmark:
     @staticmethod
     def test(
             method_name: Literal['push', 'unshift', 'shift', 'pop', 'index', 'insert', 'remove'],
-            get_arguments: Callable[[int], dict[str, Any]]
+            get_arguments: Callable[[int], list[Any]]
     ):
         linked_list = SingleLinkedList[int]()
 
