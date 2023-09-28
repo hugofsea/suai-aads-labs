@@ -1,4 +1,3 @@
-import json
 from dataclasses import dataclass
 from typing import Generic, TypeVar, Optional, Iterable
 
@@ -39,6 +38,17 @@ class DoubleLinkedList(Generic[T]):
             while i > __index:
                 node = node.prev_ptr
                 i -= 1
+
+    def __contains__(self, __data: T) -> bool:
+        node = self.__head
+
+        while node is not None:
+            if node.data == __data:
+                return True
+
+            node = node.next_ptr
+
+        return False
 
     def __len__(self) -> int:
         return self.__length
@@ -137,6 +147,17 @@ class DoubleLinkedList(Generic[T]):
         self.__length -= 1
 
         return data
+
+    def has(self, __data: T, right_search: bool = False):
+        node = self.__head if not right_search else self.__tail
+
+        while node is not None:
+            if node.data == __data:
+                return True
+
+            node = node.next_ptr if not right_search else node.prev_ptr
+
+        return False
 
     def reverse(self):
         current_node = self.__head
