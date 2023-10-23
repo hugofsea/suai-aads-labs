@@ -1,14 +1,15 @@
-from typing import TypeVar, Generic, Optional, Iterable
+from typing import Optional, Iterable
 
 from datastructures import DoubleLinkedList
 
-T = TypeVar('T')
 
-
-class Queue(Generic[T]):
+class Queue[T]:
     def __init__(self, iterable: Optional[Iterable[T]] = None):
         self._list = DoubleLinkedList[T](iterable)
         self._size = 0
+
+    def __len__(self):
+        return len(self._list)
 
     def __str__(self) -> str:
         return str(self._list).replace('DoubleLinkedList', 'Queue')
