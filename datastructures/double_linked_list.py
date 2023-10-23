@@ -5,13 +5,13 @@ T = TypeVar('T')
 
 
 @dataclass
-class Node(Generic[T]):
+class Node[T]:
     data: T
     prev_ptr: 'Optional[Node[T]]' = None
     next_ptr: 'Optional[Node[T]]' = None
 
 
-class DoubleLinkedList(Generic[T]):
+class DoubleLinkedList[T]:
     def __init__(self, __iterable: Optional[Iterable[T]] = None):
         self.__head: Optional[Node[T]] = None
         self.__tail: Optional[Node[T]] = None
@@ -120,10 +120,11 @@ class DoubleLinkedList(Generic[T]):
         data = remove_node.data
 
         self.__tail = remove_node.prev_ptr
-        self.__tail.next_ptr = None
 
         if self.__length == 1:
             self.__head = None
+        else:
+            self.__tail.next_ptr = None
 
         del remove_node
         self.__length -= 1
@@ -132,16 +133,17 @@ class DoubleLinkedList(Generic[T]):
 
     def shift(self) -> T:
         if self.__length == 0:
-            raise IndexError('pop from empty list')
+            raise IndexError('shift from empty list')
 
         remove_node = self.__head
         data = remove_node.data
 
         self.__head = remove_node.next_ptr
-        self.__head.prev_ptr = None
 
         if self.__length == 1:
             self.__tail = None
+        else:
+            self.__head.prev_ptr = None
 
         del remove_node
         self.__length -= 1
