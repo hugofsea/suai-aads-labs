@@ -1,6 +1,6 @@
 from timeit import timeit
 from implementation import CarWithKey, CarAVLTree
-from instances import USD
+from models import USD
 
 ITERATIONS = 2000
 ITEMS = 500

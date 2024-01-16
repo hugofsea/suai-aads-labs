@@ -1,6 +1,6 @@
 from timeit import timeit
 from implementation import Queue
-from instances import Student
+from models import Student
 
 
 ITERATIONS = 2000

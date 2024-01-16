@@ -1,6 +1,6 @@
 import unittest
 from implementation import StudentsQueue
-from instances import Student
+from models import Student
 
 
 class TestStudentsQueue(unittest.TestCase):
@@ -57,6 +57,19 @@ class TestStudentsQueue(unittest.TestCase):
         self.assertEqual(len(loaded_queue), len(self.queue))
         self.assertEqual(loaded_queue.get(), self.queue.get())
         self.assertEqual(loaded_queue.get(), self.queue.get())
+
+    def test_clear(self):
+        student1 = Student(full_name="Alice", group="A101", course=1, age=20, average_rating=4.5)
+        student2 = Student(full_name="Bob", group="B202", course=2, age=21, average_rating=3.8)
+
+        self.queue.add(student1)
+        self.queue.add(student2)
+
+        self.queue.clear()
+
+        self.assertEqual(len(self.queue), 0)
+        self.assertEqual(self.queue.first, None)
+        self.assertEqual(self.queue.last, None)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ from typing import Optional, TextIO, Any
 
 from datastructures import AVLTree, AVLTreeNode
 from datastructures.avl_tree import IData, K
-from instances import Car
+from models import Car
 
 
 class CarWithKey(Car, IData):

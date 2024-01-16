@@ -15,11 +15,11 @@ class Queue[T]:
         return str(self._list).replace('DoubleLinkedList', 'Queue')
 
     @property
-    def last(self) -> T:
+    def last(self) -> Optional[T]:
         return self._list.last
 
     @property
-    def first(self) -> T:
+    def first(self) -> Optional[T]:
         return self._list.first
 
     def add(self, data: T) -> None:

@@ -3,7 +3,7 @@ import json
 from typing import TextIO, Any
 
 from datastructures import Queue
-from instances import Student
+from models import Student
 
 
 class StudentsQueue(Queue[Student]):

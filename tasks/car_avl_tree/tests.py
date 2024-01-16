@@ -1,6 +1,6 @@
 import unittest
 from datastructures.avl_tree import EmptyTreeError
-from instances import Car, USD
+from models import Car, USD
 from implementation import CarAVLTree, CarWithKey
 
 
