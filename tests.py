@@ -1,6 +1,6 @@
 import unittest
 
-from main import DoubleLinkedList, USD, Car
+from main import DoubleLinkedList, USD, Car, quick_select, fibonacci_search
 
 
 class TestDoubleLinkedList(unittest.TestCase):
@@ -38,39 +38,9 @@ class TestDoubleLinkedList(unittest.TestCase):
                                          Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
                                          Car('Model1', 'VIN1', 2.0, USD(15000), 120.0)])
 
-    def test_merge_sort(self):
-        self.car_list.merge_sort()
-        sorted_data = list(self.car_list)
-        self.assertEqual(sorted_data, [Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
-                                       Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-                                       Car('Model3', 'VIN3', 2.5, USD(20000), 130.0)])
-
-    def test_heap_sort(self):
-        self.car_list.heap_sort()
-        sorted_data = list(self.car_list)
-        self.assertEqual(sorted_data, [
-            Car('Model3', 'VIN3', 2.5, USD(20000), 130.0),
-            Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-            Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
-        ])
-
-    def test_selection_sort(self):
-        self.car_list.selection_sort()
-        sorted_data = list(self.car_list)
-        self.assertEqual(sorted_data, [
-            Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
-            Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-            Car('Model3', 'VIN3', 2.5, USD(20000), 130.0),
-        ])
-
-    def test_comb_sort(self):
-        self.car_list.comb_sort()
-        sorted_data = list(self.car_list)
-        self.assertEqual(sorted_data, [
-            Car('Model3', 'VIN3', 2.5, USD(20000), 130.0),
-            Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-            Car('Model2', 'VIN2', 1.8, USD(12000), 110.0)
-        ])
+    def test_quick_select(self):
+        car = quick_select(self.car_list, 1)
+        self.assertEqual(car.price, USD(12000))
 
 
 if __name__ == '__main__':

@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass
 from typing import Optional, Iterable, NamedTuple, NewType
 
@@ -181,120 +182,71 @@ class DoubleLinkedList:
 
         self.__head, self.__tail = self.__tail, self.__head
 
-    def merge_sort(self) -> None:
-        def merge(left, right):
-            result = []
-            i = j = 0
-
-            while i < len(left) and j < len(right):
-                if left[i].price <= right[j].price:
-                    result.append(left[i])
-                    i += 1
-                else:
-                    result.append(right[j])
-                    j += 1
-
-            result.extend(left[i:])
-            result.extend(right[j:])
-            return result
-
-        def _merge_sort(lst):
-            if len(lst) <= 1:
-                return lst
-
-            mid = len(lst) // 2
-            left = _merge_sort(lst[:mid])
-            right = _merge_sort(lst[mid:])
-            return merge(left, right)
-
-        sorted_data = _merge_sort(list(self))
-        self.__head = None
-        self.__tail = None
-        self.__length = 0
-
-        for data in sorted_data:
-            self.push(data)
-
-    def heap_sort(self) -> None:
-        def heapify(lst, n, i):
-            largest = i
-            left = 2 * i + 1
-            right = 2 * i + 2
-
-            if left < n and lst[left].engine_volume < lst[largest].engine_volume:
-                largest = left
-
-            if right < n and lst[right].engine_volume < lst[largest].engine_volume:
-                largest = right
-
-            if largest != i:
-                lst[i], lst[largest] = lst[largest], lst[i]
-                heapify(lst, n, largest)
-
-        length = len(self)
-        arr: list[Car] = list(self)
-
-        for i in range(length // 2 - 1, -1, -1):
-            heapify(arr, length, i)
-
-        for i in range(length - 1, 0, -1):
-            arr[i], arr[0] = arr[0], arr[i]
-            heapify(arr, i, 0)
-
-        self.__head = None
-        self.__tail = None
-        self.__length = 0
-
-        for data in arr:
-            self.push(data)
-
-    def selection_sort(self) -> None:
-        current = self.__head
-
-        while current:
-            min_node = current
-            next_node = current.next_ptr
-
-            while next_node:
-                if min_node.data.engine_volume > next_node.data.engine_volume:
-                    min_node = next_node
-                next_node = next_node.next_ptr
-
-            if current != min_node:
-                current.data, min_node.data = min_node.data, current.data
-
-            current = current.next_ptr
-
-    def comb_sort(self):
-        def get_next_gap(current_gap):
-            next_gap = int(current_gap / 1.3)
-            return max(next_gap, 1)
-
-        arr: list[Car] = list(self)
-        n = len(arr)
-        gap = n
-        swapped = True
-
-        while gap != 1 or swapped:
-            gap = get_next_gap(gap)
-            swapped = False
-
-            for i in range(0, n - gap):
-                j = i + gap
-                if arr[i].average_speed < arr[j].average_speed:
-                    arr[i], arr[j] = arr[j], arr[i]
-                    swapped = True
-
-        self.__head = None
-        self.__tail = None
-        self.__length = 0
-
-        for data in arr:
-            self.push(data)
-
     def __check_index(self, __index: int):
         if not isinstance(__index, int):
             raise TypeError('list indices must be integers')
 
         if not (0 <= __index < self.__length or -self.__length <= -__index <= -1):
             raise IndexError('list index out of range')
+
+
+def quick_select(linked_list: DoubleLinkedList, k: int) -> Car:
+    if len(linked_list) == 1:
+        return linked_list.first
+
+    pivot = linked_list[random.randint(0, len(linked_list) - 1)]
+    L = DoubleLinkedList()
+    M = DoubleLinkedList()
+    R = DoubleLinkedList()
+
+    for car in linked_list:
+        if pivot.price > car.price:
+            L.push(car)
+
+        if pivot.price == car.price:
+            M.push(car)
+
+        if pivot.price < car.price:
+            R.push(car)
+
+    if k <= len(L):
+        return quick_select(L, k)
+    elif k <= len(L) + len(M):
+        return pivot
+    else:
+        return quick_select(R, k - (len(L) + len(M)))
+
+
+def fibonacci_search(linked_list: DoubleLinkedList, price: int):
+    if price < linked_list.first.price or price > linked_list.last.price:
+        raise ValueError('Not Found')
+
+    fm2 = 0
+    fm1 = 1
+    fm = fm1 + fm2
+    offset = -1
+
+    while fm < len(linked_list):
+        fm2 = fm1
+        fm1 = fm
+        fm = fm1 + fm2
+
+    while fm > 1:
+        i = min(offset + fm2, len(linked_list) - 1)
+        if linked_list[i].price < price:
+            fm = fm1
+            fm1 = fm2
+            fm2 = fm - fm1
+            offset = i
+        elif linked_list[i].price > price:
+            fm = fm2
+            fm1 = fm1 - fm2
+            fm2 = fm - fm1
+        else:
+            return i
+
+    if fm1 == 1:
+        if linked_list[offset + 1].price == price:
+            return offset + 1
+
+    raise ValueError('Not Found')
