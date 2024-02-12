@@ -1,8 +1,12 @@
 import random
 from dataclasses import dataclass
-from typing import Optional, Iterable, NamedTuple, NewType
+from typing import Optional, NamedTuple, NewType
 
 USD = NewType('USD', int)
+
+
+class ShouldBeSortedError(Exception):
+    ...
 
 
 class Car(NamedTuple):
@@ -21,14 +25,13 @@ class Node:
 
 
 class DoubleLinkedList:
-    def __init__(self, __iterable: Optional[Iterable[Car]] = None):
+    def __init__(self, *args: Car):
         self.__head: Optional[Node] = None
         self.__tail: Optional[Node] = None
         self.__length: int = 0
 
-        if __iterable is not None:
-            for data in __iterable:
-                self.push(data)
+        for data in args:
+            self.push(data)
 
     def __getitem__(self, __index: int) -> Car:
         self.__check_index(__index)
@@ -217,8 +220,14 @@ def quick_select(linked_list: DoubleLinkedList, k: int) -> Car:
         return quick_select(R, k - (len(L) + len(M)))
 
 
-def fibonacci_search(linked_list: DoubleLinkedList, price: int):
-    if price < linked_list.first.price or price > linked_list.last.price:
+def fibonacci_search(linked_list: DoubleLinkedList, price: USD):
+    arr = []
+    for car in linked_list:
+        if arr and arr[-1].price > car.price:
+            raise ShouldBeSortedError('Linked list must be sorted in ascending order')
+        arr.append(car)
+
+    if price < arr[0].price or price > arr[-1].price:
         raise ValueError('Not Found')
 
     fm2 = 0
@@ -226,19 +235,19 @@ def fibonacci_search(linked_list: DoubleLinkedList, price: int):
     fm = fm1 + fm2
     offset = -1
 
-    while fm < len(linked_list):
+    while fm < len(arr):
         fm2 = fm1
         fm1 = fm
         fm = fm1 + fm2
 
     while fm > 1:
-        i = min(offset + fm2, len(linked_list) - 1)
-        if linked_list[i].price < price:
+        i = min(offset + fm2, len(arr) - 1)
+        if arr[i].price < price:
             fm = fm1
             fm1 = fm2
             fm2 = fm - fm1
             offset = i
-        elif linked_list[i].price > price:
+        elif arr[i].price > price:
             fm = fm2
             fm1 = fm1 - fm2
             fm2 = fm - fm1
@@ -246,7 +255,7 @@ def fibonacci_search(linked_list: DoubleLinkedList, price: int):
             return i
 
     if fm1 == 1:
-        if linked_list[offset + 1].price == price:
+        if arr[offset + 1].price == price:
             return offset + 1
 
     raise ValueError('Not Found')
