@@ -192,6 +192,40 @@ class DoubleLinkedList:
         if not (0 <= __index < self.__length or -self.__length <= -__index <= -1):
             raise IndexError('list index out of range')
 
+    def merge_sort(self) -> None:
+        def merge(left, right):
+            result = []
+            i = j = 0
+
+            while i < len(left) and j < len(right):
+                if left[i].price <= right[j].price:
+                    result.append(left[i])
+                    i += 1
+                else:
+                    result.append(right[j])
+                    j += 1
+
+            result.extend(left[i:])
+            result.extend(right[j:])
+            return result
+
+        def _merge_sort(lst):
+            if len(lst) <= 1:
+                return lst
+
+            mid = len(lst) // 2
+            left = _merge_sort(lst[:mid])
+            right = _merge_sort(lst[mid:])
+            return merge(left, right)
+
+        sorted_data = _merge_sort(list(self))
+        self.__head = None
+        self.__tail = None
+        self.__length = 0
+
+        for data in sorted_data:
+            self.push(data)
+
 
 def quick_select(linked_list: DoubleLinkedList, k: int) -> Car:
     if len(linked_list) == 1:
@@ -220,7 +254,7 @@ def quick_select(linked_list: DoubleLinkedList, k: int) -> Car:
         return quick_select(R, k - (len(L) + len(M)))
 
 
-def fibonacci_search(linked_list: DoubleLinkedList, price: USD):
+def fibonacci_search(linked_list: DoubleLinkedList, price: USD) -> int:
     arr = []
     for car in linked_list:
         if arr and arr[-1].price > car.price:
