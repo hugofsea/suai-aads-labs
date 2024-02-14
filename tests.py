@@ -5,8 +5,8 @@ from main import DoubleLinkedList, USD, Car, quick_select, fibonacci_search, Sho
 
 class TestDoubleLinkedList(unittest.TestCase):
     def setUp(self):
-        self.car_list = DoubleLinkedList(Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-                                         Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
+        self.car_list = DoubleLinkedList(Car('Model1', 'VIN1', 2.0, USD(12000), 120.0),
+                                         Car('Model2', 'VIN2', 1.8, USD(15000), 110.0),
                                          Car('Model3', 'VIN3', 2.5, USD(20000), 130.0))
 
     def test_push(self):
@@ -25,18 +25,18 @@ class TestDoubleLinkedList(unittest.TestCase):
     def test_shift(self):
         shifted_car = self.car_list.shift()
         self.assertEqual(len(self.car_list), 2)
-        self.assertEqual(shifted_car, Car('Model1', 'VIN1', 2.0, USD(15000), 120.0))
+        self.assertEqual(shifted_car, Car('Model1', 'VIN1', 2.0, USD(12000), 120.0))
 
     def test_has(self):
-        self.assertTrue(self.car_list.has(Car('Model2', 'VIN2', 1.8, USD(12000), 110.0)))
+        self.assertTrue(self.car_list.has(Car('Model2', 'VIN2', 1.8, USD(15000), 110.0)))
         self.assertFalse(self.car_list.has(Car('Model4', 'VIN4', 2.2, USD(18000), 125.0)))
 
     def test_reverse(self):
         self.car_list.reverse()
         reversed_data = list(self.car_list)
         self.assertEqual(reversed_data, [Car('Model3', 'VIN3', 2.5, USD(20000), 130.0),
-                                         Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
-                                         Car('Model1', 'VIN1', 2.0, USD(15000), 120.0)])
+                                         Car('Model2', 'VIN2', 1.8, USD(15000), 110.0),
+                                         Car('Model1', 'VIN1', 2.0, USD(12000), 120.0)])
 
     def test_quick_select(self):
         car1 = quick_select(self.car_list, 1)
@@ -47,10 +47,9 @@ class TestDoubleLinkedList(unittest.TestCase):
         self.assertEqual(car2.price, USD(15000))
         self.assertEqual(car3.price, USD(20000))
 
-    def test_fib_search(self):
-        self.car_list = DoubleLinkedList(Car('Model1', 'VIN1', 2.0, USD(15000), 120.0),
-                                         Car('Model2', 'VIN2', 1.8, USD(12000), 110.0),
-                                         Car('Model3', 'VIN3', 2.5, USD(20000), 130.0))
+    def test_fib_search_sort_error(self):
+        first_car = self.car_list.shift()
+        self.car_list.push(first_car)
 
         with self.assertRaises(ShouldBeSortedError):
             fibonacci_search(self.car_list, USD(12000))
@@ -61,9 +60,11 @@ class TestDoubleLinkedList(unittest.TestCase):
             Car('Model3', 'VIN3', 2.5, USD(20000), 130.0)
         )
 
+    def test_fib_search_value_error(self):
         with self.assertRaises(ValueError):
             fibonacci_search(self.car_list, USD(12001))
 
+    def test_fib_search(self):
         index = fibonacci_search(self.car_list, USD(20000))
 
         self.assertEqual(index, 2)
