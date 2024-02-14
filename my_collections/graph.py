@@ -1,13 +1,10 @@
-from my_collections.hash_table import HashTable
-
-
 class Graph:
     def __init__(self, is_directed: bool = False) -> None:
-        self.matrix: list[HashTable[int, int]] = []
+        self.matrix: list[dict[int, int]] = []
         self.is_directed = is_directed
 
     def add_vertex(self):
-        self.matrix.append(HashTable())
+        self.matrix.append(dict())
 
     def add_edge(self, vertex1: int, vertex2: int, weight: int = 1) -> None:
         self.matrix[vertex1][vertex2] = weight
@@ -16,11 +13,13 @@ class Graph:
             self.matrix[vertex2][vertex1] = weight
 
     def remove_vertex(self, vertex_to_remove: int) -> None:
+        del self.matrix[vertex_to_remove]
+
         for vertex1 in self.matrix:
             try:
                 vertex1.pop(vertex_to_remove)
 
-                for vertex2 in vertex1.keys():
+                for vertex2 in list(vertex1.keys()):
                     if vertex2 > vertex_to_remove:
                         weight = vertex1.pop(vertex2)
                         vertex1[vertex2 - 1] = weight
@@ -40,7 +39,7 @@ class Graph:
         return self.matrix[vertex1].get(vertex2) is not None
 
     def get_adjacent_vertices(self, vertex: int):
-        return self.matrix[vertex].keys()
+        return list(self.matrix[vertex].keys())
 
     def display(self) -> None:
         print(
@@ -66,6 +65,9 @@ class Graph:
             for row in self.matrix
         ]
 
+        for i in range(len(dist)):
+            dist[i][i] = 0
+
         for k, _ in enumerate(self.matrix):
             for i, _ in enumerate(self.matrix):
                 for j, _ in enumerate(self.matrix):
@@ -82,7 +84,7 @@ class Graph:
             min_weight = float('inf')
             min_edge = None
             for vertex1, _ in enumerate(self.matrix):
-                if selected[vertex1]:
+                if not selected[vertex1]:
                     continue
 
                 for vertex2, _ in enumerate(self.matrix):
@@ -94,6 +96,10 @@ class Graph:
                 vertex1, vertex2, weight = min_edge
                 edges.append((vertex1, vertex2, weight))
                 selected[vertex2] = True
+
+        # Проверка на связность графа
+        if len(edges) < len(self.matrix) - 1:
+            return None  # Граф несвязный, возвращаем None
 
         min_spanning_tree = Graph()
 
